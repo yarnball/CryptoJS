@@ -1,5 +1,4 @@
 import React from 'react';
-
 import CryptoJS from 'crypto-js'
 
 
@@ -30,8 +29,14 @@ class App extends React.Component {
         onChange={e => this.setState({ key: e.target.value }) } 
         value={key} type="text" 
         />
-        
-        Encrypted data: {ciphertext.toString()}
+        <br/>
+        Encrypted data raw value: {ciphertext.toString()}
+        <br/>
+        <b>
+        Original data size: {Buffer.byteLength(text, 'utf8')}
+        <br/>
+        Encrypted data size: {Buffer.byteLength(ciphertext.toString(), 'utf8')}
+        </b>
       </div>
     );
   }
