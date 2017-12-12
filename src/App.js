@@ -35,8 +35,7 @@ class App extends React.Component {
       out += String.fromCharCode(
         key.charCodeAt(i % key.length) ^ text.charCodeAt(i)
       );
-    console.log(out.length)
-    return out;
+    return out
   };
 
   render() {
@@ -47,8 +46,8 @@ class App extends React.Component {
     // const bytes = CryptoJS.AES.decrypt(ciphertext.toString(), key);
     // const plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
-    const origText = text.length;
-    const encrText = encodeURI(ciphertext.toString()).split(/%..|./).length;
+    var origText = text.length;
+    var encrText = encodeURI(ciphertext.toString()).split(/%..|./).length;
     
     let xorEncr = this.xor(text, key)
 
@@ -91,6 +90,9 @@ class App extends React.Component {
           <br />
           XOR is <b> {xorPercent}%</b> bigger than the plain string
         </div>
+
+        <h2> converted back</h2>
+        XOR: <i>{this.xor(xorEncr, key)}</i><br/>
       </div>
     );
   }
