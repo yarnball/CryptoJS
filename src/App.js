@@ -1,28 +1,5 @@
-import React from 'react';
-import CryptoJS from 'crypto-js'
-
-// TESTING it out here:
-// https://codesandbox.io/s/pjknkw7yyx
-
-// CHECKOUT:
- // webcrypto and using AES-GCM 
- // xor
-
-// niggler
-//  function xor(password, data) { var out = "";  for(var i = 0; i < data.length; ++i) out += String.fromCharCode(password.charCodeAt(i % password.length) ^ data.charCodeAt(i)); return out; }
-// niggler
-//  data is the html you want to encode or decode
-// niggler
-//  xor("password", "this is a test") gives you the string '\u0004\t\u001a\u0000W\u0006\u0001D\u0011A\u0007\u0016\u0004\u001b'
-// niggler
-//  and to decode
-// 12:00 niggler
-//  xor("password", '\u0004\t\u001a\u0000W\u0006\u0001D\u0011A\u0007\u0016\u0004\u001b') gives you ’this is a test'
-//  If im encrypting 500kb of HTML with an 8 character key- it makes it less secure
-
-// XOR Security/Vulnurabliity
-// the way you would attack the xor encryption is to feed a bunch of zeros, the net result will be a repetition of the password
-// IE pass it null characters
+import React from "react";
+import CryptoJS from "crypto-js";
 
 class App extends React.Component {
   state = {
@@ -35,7 +12,7 @@ class App extends React.Component {
       out += String.fromCharCode(
         key.charCodeAt(i % key.length) ^ text.charCodeAt(i)
       );
-    return out
+    return out;
   };
 
   render() {
@@ -48,51 +25,57 @@ class App extends React.Component {
 
     var origText = text.length;
     var encrText = encodeURI(ciphertext.toString()).split(/%..|./).length;
-    
-    let xorEncr = this.xor(text, key)
 
-    const aesPercent = (encrText - origText) / origText * 100;
-    const xorPercent = (btoa(xorEncr).length - origText) / origText * 100;
-    
+    let xorEncr = this.xor(text, key);
+
+    const aesPercent = (encrText - origText) / origText * 100 + "%" || "";
+    const xorPercent =
+      (btoa(xorEncr).length - origText) / origText * 100 + "%" || "";
+
     return (
       <div>
         Encrypt this data:
         <input
           onChange={e => this.setState({ text: e.target.value })}
-          value={text}
           type="text"
         />
         <br />
         Using this key:
         <input
           onChange={e => this.setState({ key: e.target.value })}
-          value={key}
           type="text"
         />
+        <br />
+        <br />
+        {origText > 1 ? (
+          <span>
+            {" "}
+            AES is <b> {aesPercent}</b> bigger than the plain string<br />
+            <br />
+            XOR is <b> {xorPercent}</b> bigger than the plain string
+          </span>
+        ) : (
+          <span>
+            <span> Please input a value ... </span>
+          </span>
+        )}
+        <br />
+        <br />
         <br />
         AES Encryption: {ciphertext.toString()}
         <br />
         XOR Encryption {btoa(xorEncr)}
-        <br/>
+        <br />
         <b>
           Original data size: {origText}
           <br />
-          <br />
           AES data size: {encrText}
-          <br/>
+          <br />
           XOR data size: {btoa(xorEncr).length}
         </b>
+        <h3> Decoded value:</h3>
+        XOR || <i>{this.xor(xorEncr, key)}</i>
         <br />
-        <br />
-        <div>
-          {" "}
-          AES is <b> {aesPercent}%</b> bigger than the plain string<br/>
-          <br />
-          XOR is <b> {xorPercent}%</b> bigger than the plain string
-        </div>
-
-        <h2> converted back</h2>
-        XOR: <i>{this.xor(xorEncr, key)}</i><br/>
       </div>
     );
   }
